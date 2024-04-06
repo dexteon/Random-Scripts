@@ -1,0 +1,26 @@
+$targetDirectory = "%APPDATA%" # Set your target directory here
+
+# Function to remove non-ASCII characters
+function Remove-NonAsciiCharacters {
+    param ([string]$InputString)
+    $OutputString = $InputString -replace "[^\x00-\x7F]", ""
+    return $OutputString
+}
+
+# Get all files in the target directory recursively
+$files = Get-ChildItem -Path $targetDirectory -Recurse -File
+
+foreach ($file in $files) {
+    $newName = Remove-NonAsciiCharacters -InputString $file.Name
+    # Check if the new name is different and not empty
+    if ($newName -ne $file.Name -and $newName -ne "") {
+        $newFullPath = Join-Path -Path $file.DirectoryName -ChildPath $newName
+        # Check if a file with the new name already exists
+        if (-Not (Test-Path -Path $newFullPath)) {
+            Rename-Item -Path $file.FullName -NewName $newName
+            Write-Output "Renamed `"$($file.Name)`" to `"$newName`""
+        } else {
+            Write-Output "Cannot rename `"$($file.Name)`" to `"$newName`" because a file with the new name already exists."
+        }
+    }
+}
