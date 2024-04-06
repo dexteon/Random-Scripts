@@ -1,0 +1,28 @@
+// ==UserScript==
+// @name         Instacart Ad Remover Based on Data Attribute
+// @namespace    http://tampermonkey.net/
+// @version      2.2
+// @description  Removes  sponsored products from Instacart view.
+// @author       GPT-4
+// @grant        none
+// @match        *://*.instacart.com/*
+// ==/UserScript==
+(function() {
+    'use strict';
+    function removeSponsoredProducts() {
+        document.querySelectorAll('[data-cfp-eligible]').forEach((element) => {
+            const sponsoredItem = element.closest('li');
+            if (sponsoredItem) {
+                sponsoredItem.remove();
+            }
+        });
+    }
+    const observer = new MutationObserver(() => {
+        removeSponsoredProducts();
+    });
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    removeSponsoredProducts();
+})();
