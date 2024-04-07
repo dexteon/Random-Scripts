@@ -28,6 +28,13 @@ Select-Object DisplayName, Publisher, InstallDate, DisplayVersion, UninstallStri
 Sort-Object -Property DisplayName |
 Format-Table -AutoSize
 ```
+
+Update Python packages
+```
+pip list --outdated --format=json | ConvertFrom-Json | % {pip install --upgrade $_.name}
+```
+
+
 ## Tamper Monkey Scripts
 
 Instacart Ad Remover Based on Data Attribute
