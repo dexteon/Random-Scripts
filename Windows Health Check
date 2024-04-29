@@ -1,4 +1,7 @@
 chkdsk C: /f
 sfc /scannow
 cleanmgr /sagerun:1
-DISM /Online /Cleanup-Image /RestoreHealth
+dism /online /cleanup-image /CheckHealth
+dism /online /cleanup-image /ScanHealth
+dism /online /cleanup-image /startcomponentcleanup
+dism /online /cleanup-image /restorehealth
